@@ -1,0 +1,78 @@
+// to connect fonts used mixin!
+// fonts should be in the "fonts" folder
+// you need to specify the font name, font file name, font font-weight, font font-style;
+// uncomment additional font formats if necessary woff2 svg line - 26
+// code taken from https://gist.github.com/jonathantneal/d0460e5c2d5d7f9bc5e6
+
+// font tips
+//font-weight-all: 100 Thin (Hairline) | 200 Extra Light (Ultra Light) | 300 Light | 400 Normal | 500 Medium | 600 Semi Bold (Demi Bold) | 700 Bold | 800 Extra Bold (Ultra Bold) | 900 Black (Heavy)
+//font-family: serif | sans-serif | monospace | cursive | fantasy | more info https://ru.wikipedia.org/wiki/Семейство_шрифтов
+//font-style: normal | italic | oblique
+
+@function str-replace($string, $search, $replace: "") {
+	$index: str-index($string, $search);
+
+	@if $index {
+		@return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+	}
+
+	@return $string;
+}
+
+//=============================================================================
+//Font Face
+//=============================================================================
+//------------------------------uncomment additional font formats if necessary woff2 svg
+@mixin ff-mixin($name, $path, $weight: null, $style: null, $exts: eot woff ttf /* woff2 svg */) {
+	$src: null;
+
+	$extmods: (
+		eot: "?",
+		svg: "#" + str-replace($name, " ", "_")
+	);
+
+	$formats: (
+		otf: "opentype",
+		ttf: "truetype"
+	);
+
+	@each $ext in $exts {
+		$extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+		$format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+		$src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+	}
+
+	@font-face {
+		font-family: quote($name);
+		font-style: $style;
+		font-weight: $weight;
+		src: $src;
+	}
+}
+
+
+//--------------how to use
+// to connect fonts used mixin!
+// fonts are in the folder "fonts"
+// you need to specify the font name, font file name, font font weight, font font style;
+
+//--------------about mixin values
+// @include ff-mixin($base-main-font ---(variable for font name - font-family),
+// $font-folder-root+"example-font-name-1" ---(change only example-font-name-1 - font file name),
+// 400 ---(font-weigh),
+// normal ---(font-style);
+
+// variable for a folder with fonts (can be changed if necessary)
+$font-folder-root: "../fonts/";
+// variable for the main font name (the value can be set manually without a variable, it is redefined in file variables.scss)
+$base-main-font: "example-font-family" !default;
+
+//-------- Example how use mixin fonts ----------
+
+//------------mixin font 1 start
+// @include ff-mixin($base-main-font, $font-folder-root+"example-font-name-1", 400, normal);
+//------------mixin font 1 end
+
+//------------mixin font 2 start
+// @include ff-mixin($base-main-font, $font-folder-root+"example-font-name-2", 700, italic);
+//------------mixin font 2 end

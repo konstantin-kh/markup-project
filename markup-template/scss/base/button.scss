@@ -1,0 +1,446 @@
+//
+//Variable for button
+//
+// The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
+$yiq-contrasted-threshold: 150 !default;
+// Customize the light and dark text colors for use in our YIQ color contrast function.
+$yiq-text-dark: #000 !default;
+$yiq-text-light: #fff !default;
+//how much persent darker to do colors when button hover
+$button-hover-darken-persent: 8% !default;
+
+//
+// function Color contrast (what color to use #000 or #fff)
+//
+
+@function color-yiq($color) {
+	$r: red($color);
+	$g: green($color);
+	$b: blue($color);
+	$yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+
+	@if ($yiq >=$yiq-contrasted-threshold) {
+		@return $yiq-text-dark;
+	}
+
+	@else {
+		@return $yiq-text-light;
+	}
+}
+
+//
+// Button variants mixins
+//
+
+@mixin button-variant ($background: $fon-brand,
+											$color: color-yiq($background),
+											$border: $background,
+											$hover-background: darken($background, $button-hover-darken-persent),
+											$hover-color: color-yiq($hover-background),
+											$hover-border: darken($border, $button-hover-darken-persent)) {
+	color: $color;
+	background-color: $background;
+	border-color: $border;
+
+	&:hover {
+		color: $hover-color;
+		background-color: $hover-background;
+		border-color: $hover-border;
+	}
+}
+
+@mixin button-outline-variant($color: $color-brand,
+															$color-hover: color-yiq($color),
+															$hover-background: $color,
+															$color-border: $color,
+															$hover-border: $color-hover) {
+	color: $color;
+	background-color: transparent;
+	background-image: none;
+	border-color: $color-border;
+
+	&:hover {
+		color: $color-hover;
+		background-color: $hover-background;
+		border-color: $hover-border;
+	}
+}
+
+//input mixin without hover
+@mixin input-variant ($background: $fon-brand,
+											$color: color-yiq($background),
+											$border: $background) {
+	color: $color;
+	background-color: $background;
+	border-color: $border;
+}
+
+//
+// Button sizes mixin
+//
+
+@mixin button-size($padding-y:10px, $padding-x:15px, $font-size:16px, $border-radius:0px, $border-width: 1px, $line-height:1.1, $font-weight: 700) {
+	padding: $padding-y $padding-x;
+	font-size: $font-size;
+	border-radius: $border-radius;
+	border-width: $border-width;
+	line-height: $line-height;
+	font-weight: $btn-font-weight;
+}
+
+//
+//-------------------style for button
+//
+
+//
+// Base styles for button
+//
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: $btn-min-width;
+	height: 80px;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	border-style: solid;
+	text-transform: uppercase;
+	box-shadow: $btn-box-shadow;
+
+	//variable located markup-template/scss/base/variables.scss
+	//size button mixin
+	// $btn-padding-y | $btn-padding-x | $btn-font-size | $btn-radius | $btn-border-width | $btn-line-height
+	@include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-radius, $btn-border-width, $btn-line-height);
+	//color button mixin $background | $color | $border | $hover-background | $hover-color | $hover-border
+	@include button-variant($btn-bg-color, $white, $btn-bg-color);
+
+	@include media("<tablet") {
+		box-shadow: 5px 5px 10px rgba(42, 43, 44, 0.42);
+		padding-top: 21px;
+		padding-bottom: 21px;
+	}
+
+	@include media("<tablet") {
+		br {
+			display: none;
+		}
+	}
+
+	@include media("<phone-mockup") {
+		min-width: inherit;
+		font-size: 14px;
+	}
+
+	&:hover {
+		text-decoration: none;
+	}
+
+	[class^="fa-"], [class*=" fa-"] {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		transition: transform 0.3s ease-out;
+	}
+}
+
+.btn--primary {
+	//color button mixin $background | $color | $border | $hover-background | $hover-color | $hover-border
+	@include button-variant($btn-bg-color, $white, $btn-bg-color);
+
+	@include media("<tablet") {
+		text-align: center;
+	}
+
+	[class^="fa-"], [class*=" fa-"] {
+		right: em(24px);
+
+		@include media("<tablet") {
+			display: none;
+		}
+	}
+}
+
+// if need outline button
+.btn--outline {
+	//color outline-button mixin $color | $color-hover | $hover-background | $color-border | $hover-border
+	@include button-outline-variant($base-text-color, $base-text-color, rgba($black, .03), $white, $white);
+
+	background-color: $white;
+
+	[class^="fa-"], [class*=" fa-"] {
+		right: em(28px, 16px);
+		color: $green-400;
+	}
+}
+
+.btn--outline-secondary,
+.btn--outline-info {
+	//color outline-button mixin $color | $color-hover | $hover-background | $color-border | $hover-border
+	@include button-outline-variant($gray-200, $gray-200, rgba($black, .03), $gray-300, $white);
+
+	box-shadow: none;
+	letter-spacing: 0;
+	justify-content: flex-start;
+	text-align: left;
+	padding-left: rem(28px);
+	padding-right: rem(62px);
+
+	@include media("<tablet") {
+		padding-left: 39px;
+		box-shadow: none;
+	}
+
+	[class^="fa-"], [class*=" fa-"] {
+		right: 21px;
+		color: $green-400;
+
+		@include media("<desktop") {
+			right: 27px;
+		}
+	}
+}
+
+.btn--outline-secondary {
+	[class^="fa-"], [class*=" fa-"] {
+		right: 27px;
+	}
+}
+
+.btn--outline-info {
+	padding-left: rem(64px);
+	padding-right: rem(31px);
+
+	[class^="fa-"], [class*=" fa-"] {
+		left: 20px;
+		color: $green-400;
+	}
+}
+
+.btn--outline-white {
+	//color outline-button mixin $color | $color-hover | $hover-background | $color-border | $hover-border
+	@include button-outline-variant($white, $white, rgba($black, .03), $white, $white);
+
+	padding: rem(25px) rem(61px) rem(25px) rem(30px);
+	box-shadow: none;
+	letter-spacing: 0;
+	text-align: left;
+
+	@include media("<desktop") {
+		height: 68px;
+		padding: 18px 54px 18px 29px;
+		justify-content: flex-start;
+	}
+
+	&:hover {
+		border-color: $green-400;
+	}
+
+	[class^="fa-"], [class*=" fa-"] {
+		right: em(25px, 16px);
+	}
+}
+
+.card-link {
+	@include button-outline-variant($gray-200, $gray-200, rgba($black, .03), $gray-300, $white);
+	// $btn-padding-y | $btn-padding-x | $btn-font-size | $btn-radius | $btn-border-width | $btn-line-height
+	@include button-size(20px, $btn-padding-x, $btn-font-size, $btn-radius, $btn-border-width, $btn-line-height);
+
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	border-style: solid;
+	text-transform: uppercase;
+	letter-spacing: 0;
+	padding-right: 19px;
+	padding-left: 64px;
+
+	@include media("<desktop") {
+		padding-right: 33px;
+	}
+
+	[class^="fa-"], [class*=" fa-"] {
+		position: absolute;
+		top: 50%;
+		left: 21px;
+		margin-top: 1px;
+		transform: translateY(-50%);
+		transition: transform 0.3s ease-out;
+		color: $green-400;
+	}
+}
+
+.btn--green {
+	background-color: $green-400;
+	border-color: $green-400;
+
+	&:hover {
+		border-color: $green-400;
+		background-color: darken($green-400, 15%);
+	}
+}
+
+//
+// Button Sizes
+//
+
+// if need other size button
+.btn--md {
+	min-width: inherit;
+	height: 70px;
+	padding-right: rem(84px);
+	padding-left: rem(30px);
+	line-height: 1.7;
+
+	@include media("<tablet") {
+		min-width: 183px;
+		padding: 15px 25px;
+		font-size: 14px;
+		line-height: em(16px, 14px);
+	}
+}
+
+.btn--sm {
+	min-width: 193px;
+	height: 70px;
+	padding: 25px 52px 25px 20px;
+
+	@include media("<desktop") {
+		height: 60px;
+		padding: 20px 52px 20px 20px;
+	}
+}
+
+//
+// Link buttons. Make a button look and behave like a link
+//
+
+.btn-link {
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+	min-width: rem(165px);
+	max-width: rem(275px);
+	padding: 0 26px 12px 0;
+	border-bottom: 5px solid $color-brand;
+	transition: $btn-transition;
+	color: $gray-200;
+	font-size: $btn-font-size;
+	line-height: 1.2;
+	font-weight: 700;
+	letter-spacing: 0;
+
+	@include media("<tablet") {
+		max-width: inherit;
+	}
+
+	&--green {
+		border-bottom-color: $green-400;
+	}
+
+	&--lg {
+		padding: 0 43px 20px 0;
+
+		[class^="fa-"], [class*=" fa-"] {
+			top: 0;
+			bottom: auto;
+		}
+	}
+
+	&:hover {
+		[class^="fa-"], [class*=" fa-"] {
+			transform: translateX(-6px);
+		}
+	}
+
+	[class^="fa-"], [class*=" fa-"] {
+		position: absolute;
+		bottom: em(12px, 16px);
+		right: 0;
+		transition: transform 0.3s ease-out;
+		color: $color-brand;
+	}
+}
+
+.btn-toggle {
+	height: 50px;
+	padding: 12px 19px;
+	position: relative;
+	background-color: $blue-100;
+	border-color: $blue-100;
+	box-shadow: none;
+	font-weight: 700;
+	color: $base-text-color;
+	font-size: 16px;
+	line-height: 1;
+	text-transform: none;
+	text-align: left;
+
+	&:hover {
+		background-color: darken($blue-100, 10%);
+		border-color: darken($blue-100, 10%);
+		color: $base-text-color;
+	}
+
+	&--add {
+		padding-left: 73px;
+
+		@include media("<xs-phone") {
+			padding-left: 45px;
+		}
+
+		&::before {
+			content: "\f067";
+			left: 45px;
+
+			@include media("<xs-phone") {
+				left: 18px;
+			}
+		}
+	}
+
+	&--remove {
+		padding-right: 65px;
+
+		&::before {
+			content: "\f00d";
+			right: 13px;
+		}
+	}
+
+	&::before {
+		@extend %fa-style;
+
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		margin-top: 1px;
+		color: $color-brand;
+	}
+}
+
+//
+// Block button
+//
+
+.btn-block {
+	display: block;
+	width: 100%;
+
+	// Vertically space out multiple block buttons
+	+.btn-block {
+		margin-top: 15px;
+	}
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	&.btn-block {
+		width: 100%;
+	}
+}
