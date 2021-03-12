@@ -1,0 +1,44 @@
+{
+	"name": "reliablepsd-start-project",
+	"version": "1.0.0",
+	"description": "Startkit for HTML/CSS/JS pages layout.",
+	"author": "Vyacheslav Gorishnyack",
+	"license": "ISC",
+	"scripts": {
+		"start": "gulp",
+		"dev": "gulp dev",
+		"dist": "gulp dist"
+	},
+	"exampleDevDependencies": {
+		"@babel/core": "^7.4.5",
+		"@babel/preset-env": "^7.4.5",
+		"gulp-babel": "^8.0.0-beta.2"
+	},
+	"devDependencies": {
+		"browser-sync": "^2.26.7",
+		"del": "^5.1.0",
+		"gulp": "^4.0.2",
+		"gulp-autoprefixer": "^7.0.1",
+		"gulp-cssbeautify": "^2.0.0",
+		"gulp-csscomb": "^3.1.0",
+		"gulp-csso": "^4.0.1",
+		"gulp-group-css-media-queries": "^1.2.2",
+		"gulp-html-beautify": "^1.0.1",
+		"gulp-imagemin": "^6.2.0",
+		"gulp-load-plugins": "^2.0.1",
+		"gulp-newer": "^1.4.0",
+		"gulp-notify": "^3.2.0",
+		"gulp-plumber": "^1.2.1",
+		"gulp-replace": "^1.0.0",
+		"gulp-responsive-imgz-ignore": "0.0.9",
+		"gulp-rigger": "^0.5.8",
+		"gulp-sass": "^4.0.2",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-uglify-es": "^2.0.0",
+		"imagemin-mozjpeg": "^8.0.0",
+		"imagemin-pngquant": "^8.0.0"
+	},
+	"browserslist": [
+		"last 4 version"
+	]
+}
